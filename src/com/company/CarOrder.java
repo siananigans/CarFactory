@@ -12,11 +12,12 @@ class CarOrder {
     int orderDeadlineDays;
     int orderNumber;
 
-    public CarOrder(int count, String make, String model, int deadlineDays){
-        carMake = make;
-        carModel = model;
-        carCount = count;
+    public CarOrder(int carCount, String carMake, String carModel, int orderDeadlineDays, int orderNumber){
+        this.carMake = carMake;
+        this.carModel = carModel;
+        this.carCount = carCount;
 
-        orderDeadlineDays = deadlineDays;
+        this.orderDeadlineDays = orderDeadlineDays;
+        this.orderNumber = orderNumber;
     }
 }

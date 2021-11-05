@@ -3,27 +3,47 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Random;
 import java.util.ArrayList;
+import java.util.Locale;
+import java.time.LocalDate;
+import java.time.DayOfWeek;
+import java.time.format.TextStyle;
 
 public class Main {
 
     public static void main(String[] args) {
-        // set up car data
-
+        // Set up car data
         HashMap<String, ArrayList<Car>> carStock = populateCarStock();
         System.out.println(carStock);
 
-        // Read in car data
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter Make:");
-        String make = scanner.nextLine();
-        System.out.println("Enter Model:");
-        String model = scanner.nextLine();
-        System.out.println("Enter Count:");
-        int count = scanner.nextInt();
-        System.out.println("Enter due date:");
-        int deadlineDays = scanner.nextInt();
-        CarOrder newCar = new CarOrder(count, make, model, deadlineDays);
-        System.out.println(newCar.carCount);
+        // Set up Assembly Factory
+        AssemblyFactory af = new AssemblyFactory();
+
+        int order = 1;
+        while(true) {
+            // Read in car data
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Enter Make:");
+            String make = scanner.nextLine();
+            System.out.println("Enter Model:");
+            String model = scanner.nextLine();
+            System.out.println("Enter Count:");
+            int count = scanner.nextInt();
+            System.out.println("Enter due date:");
+            int deadlineDays = scanner.nextInt();
+
+            // Create order
+            CarOrder carOrder = new CarOrder(count, make, model, deadlineDays, order);
+            order++;
+            System.out.println("Order Number: ");
+            System.out.println(carOrder.orderNumber);
+
+            // Estimate completion time
+
+        }
+    }
+    public static String getDayString(LocalDate date, Locale locale) {
+        DayOfWeek day = date.getDayOfWeek();
+        return day.getDisplayName(TextStyle.FULL, locale);
     }
 
     public static int getRandomNumber(int min, int max) {
@@ -39,17 +59,15 @@ public class Main {
         String[] fordModels = {"Fiesta", "Focus"};
         String[] mazdaModels = {"CX-50", "CX-30", "MX-90"};
         String[][] carModels = new String[][] { volvoModels, bmwModels, fordModels, mazdaModels};
-        HashMap<String, ArrayList<Car>> carStock = new HashMap<String, ArrayList<Car>>();
+        HashMap<String, ArrayList<Car>> carStock = new HashMap<>();
         for (int i = 0; i < carModels.length; i++) {
             String make = carMakes[i];
             String[] models = carModels[i];
-            ArrayList<Car> makeCars = new ArrayList<Car>(); // Create an ArrayList object
-            for (int j = 0; j < models.length; j++) {
+            ArrayList<Car> makeCars = new ArrayList<>(); // Create an ArrayList object
+            for (String s : models) {
                 int countInStock = getRandomNumber(0, 100000);
                 int daysToAssemble = getRandomNumber(0, 20);
-                long id = i;
-                String model = models[j];
-                Car tmpCar = new Car(countInStock, id, make, model, daysToAssemble);
+                Car tmpCar = new Car(countInStock, i, make, s, daysToAssemble);
                 makeCars.add(tmpCar);
             }
             carStock.put(make, makeCars);
