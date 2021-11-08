@@ -3,10 +3,6 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Random;
 import java.util.ArrayList;
-import java.util.Locale;
-import java.time.LocalDate;
-import java.time.DayOfWeek;
-import java.time.format.TextStyle;
 
 public class Main {
 
@@ -16,7 +12,7 @@ public class Main {
         System.out.println(carStock);
 
         // Set up Assembly Factory
-        AssemblyFactory af = new AssemblyFactory();
+        AssemblyFactory assemblyFactory = new AssemblyFactory();
 
         int order = 1;
         while(true) {
@@ -34,16 +30,25 @@ public class Main {
             // Create order
             CarOrder carOrder = new CarOrder(count, make, model, deadlineDays, order);
             order++;
-            System.out.println("Order Number: ");
-            System.out.println(carOrder.orderNumber);
 
             // Estimate completion time
+            Car orderedCar = carOrder.getOrderedCar(carStock);
+            int assemblyDays = assemblyFactory.estimateAssemblyTime(orderedCar.daysToAssemble * carOrder.carCount);
+            // Add 1 day to complete order
+            int daysToOrderComplete = assemblyDays + 1;
 
+            if (daysToOrderComplete < carOrder.orderDeadlineDays) {
+                System.out.println("Order Number: ");
+                System.out.println(carOrder.orderNumber);
+                System.out.println("Days until Order completion: ");
+                System.out.println(daysToOrderComplete);
+            }
+            else {
+                System.out.println("Order cannot be processed in the desired time slot.");
+                System.out.println("Estimated time to complete: ");
+                System.out.println(daysToOrderComplete);
+            }
         }
-    }
-    public static String getDayString(LocalDate date, Locale locale) {
-        DayOfWeek day = date.getDayOfWeek();
-        return day.getDisplayName(TextStyle.FULL, locale);
     }
 
     public static int getRandomNumber(int min, int max) {

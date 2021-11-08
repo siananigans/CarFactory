@@ -1,9 +1,6 @@
 package com.company;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 class CarOrder {
     int carCount;
@@ -19,5 +16,14 @@ class CarOrder {
 
         this.orderDeadlineDays = orderDeadlineDays;
         this.orderNumber = orderNumber;
+    }
+    public Car getOrderedCar(HashMap<String, ArrayList<Car>> cars) {
+        ArrayList<Car> modelCars = cars.get(carMake);
+        for (Car car : modelCars) {
+            if (car.make == carMake) {
+                return car;
+            }
+        }
+        return null;
     }
 }
